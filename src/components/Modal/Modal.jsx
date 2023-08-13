@@ -1,36 +1,57 @@
 import { Component } from 'react';
+import { createPortal } from 'react-dom';
 import PropTypes from 'prop-types';
+import { Overlay, ModalWindow } from './Modal.styled';
 
-import s from '../Modal/Modal.module.css';
+// object modal в DOM-дереве
+const modalRoot = document.querySelector('#modal-root');
 
-export class Modal extends Component {
+//class component Modal
+class Modal extends Component {
+  
   componentDidMount() {
-    window.addEventListener('keydown', this.handleKeyDown);
+    window.addEventListener('keydown', this.handleKeyDown); // Добавляємо слухач подій на натискання клавіатури.
+    document.body.style.overflow = 'hidden';
   }
 
+ 
   componentWillUnmount() {
-    window.removeEventListener('keydown', this.handleKeyDown);
+    window.removeEventListener('keydown', this.handleKeyDown); // remuve слухач подій на натискання клавіатури.
+    document.body.style.overflow = 'visible';
   }
 
-  handleKeyDown = e => {
-    if (e.keyCode === 27 || e.currentTarget === e.target) {
-      return this.props.onModalClose();
+  // слухач подій на натискання клавіатури.
+  handleKeyDown = event => {
+    if (event.code === 'Escape') {
+      this.props.onClose(); // Закриваємо модальне вікно під час натискання клавіші Escape
+    }
+  };
+
+  // Обробник кліка  модального вікна
+  handleBackdropClick = event => {
+    if (event.currentTarget === event.target) {
+      this.props.onClose(); // Закриваємо модальне вікно під час кліку 
     }
   };
 
   render() {
-    const { largeImageURL } = this.props;
-    return (
-      <div className={s.Overlay} onClick={this.handleKeyDown}>
-        <div className={s.Modal}>
-          <img src={largeImageURL} alt="" />
-        </div>
-      </div>
+    const { largeImageURL, tags } = this.props; // Отримуємо значення пропсів
+
+    return createPortal(
+      <Overlay onClick={this.handleBackdropClick}>
+        <ModalWindow>
+          <img src={largeImageURL} alt={tags} />
+        </ModalWindow>
+      </Overlay>,
+      modalRoot // Рендерим модальне вікно в об'єкт modalRoot в DOM-дереві
     );
   }
 }
 
 Modal.propTypes = {
-  onModalClose: PropTypes.func,
   largeImageURL: PropTypes.string.isRequired,
+  tags: PropTypes.string.isRequired,
+  onClose: PropTypes.func.isRequired,
 };
+
+export default Modal;

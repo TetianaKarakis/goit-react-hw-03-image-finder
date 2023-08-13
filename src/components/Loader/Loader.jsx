@@ -1,21 +1,20 @@
-import { Oval } from 'react-loader-spinner';
-import s from '../Loader/Loader.module.css';
-export const Loader = () => {
+import { ColorRing } from 'react-loader-spinner';
+import { LodeWrapper } from './Loader.styled';
+
+const Loader = () => {
   return (
-    <div className={s.overlay}>
-      <Oval
-        className={s.loader}
-        height={80}
-        width={80}
-        color="#3f51b5"
-        wrapperStyle={{}}
-        wrapperClass=""
+    <LodeWrapper>
+      <ColorRing
         visible={true}
-        ariaLabel="oval-loading"
-        secondaryColor="#3f51b5"
-        strokeWidth={2}
-        strokeWidthSecondary={2}
+        height="80"
+        width="80"
+        ariaLabel="blocks-loading"
+        wrapperStyle={{}}
+        wrapperClass="blocks-wrapper"
+        colors={['#f8d703', '#cc06f4', '#f8d703', '#06d0f3', '#f8d703']}
       />
-    </div>
+    </LodeWrapper>
   );
 };
+
+export default Loader;

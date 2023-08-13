@@ -1,30 +1,61 @@
 import { Component } from 'react';
-import PropTypes from "prop-types";
+import { BsSearch } from 'react-icons/bs';
+import PropTypes from 'prop-types';
+import {
+  SearchForm,
+  SearchInput,
+  SearchButton,
+  SearchSpan,
+  SearchLogo,
+} from './SearchBar.styled';
 
-import s from './Searchbar.module.css';
+class SearchBar extends Component {
+  state = {
+    searchName: '', // Зберігає значення введеного пошукового запиту
+    inputValue: '',
+  };
 
-export class Searchbar extends Component {
+  handleChange = event => {
+    this.setState({ inputValue: event.target.value });
+  };
+
+  handleSubmit = event => {
+    event.preventDefault(); // Запобігаємо стандартній поведінці форми
+    const searchQuery = event.target.elements.searchName.value.trim(); // Отримуємо введений пошуковий запит і видаляємо прогалини
+    this.props.onSubmit(searchQuery); //Передаємо введений пошуковий запит батьківському компоненту
+    event.target.reset(); // Скидаємо значення у полі введення після надсилання форми
+  };
+
   render() {
-  return (
-    <header className={s.Searchbar}>
-      <form className={s.SearchForm} onSubmit={this.props.onSubmit}>
-        <button type="submit" className={s.SearchForm__button}>
-          <span className={s.SearchForm__button__label}>Search</span>
-        </button>
-        <input
-          className={s.SearchForm__input}
-          type="text"
-          name="search"
-          autoComplete="off"
-          autoFocus
-          placeholder="Search images and photos"
-        />
-      </form>
-    </header>
-  );
+    return (
+      <header>
+        <SearchForm onSubmit={this.handleSubmit}>
+          <a href="https://pixabay.com/" target="_blank" rel="noreferrer">
+            <SearchLogo
+              src={require('./pixabay-logo.png')} 
+              alt="logo"
+              width="200"
+            />
+          </a>
+          <SearchButton>
+            <BsSearch />
+            <SearchSpan>Search</SearchSpan>
+          </SearchButton>
+          <SearchInput
+            name="searchName"
+            type="text"
+            id="search"
+            value={this.state.inputValue}
+            onChange={this.handleChange}
+          />
+        </SearchForm>
+      </header>
+    );
   }
+}
+
+SearchBar.propTypes = {
+  onSubmit: PropTypes.func.isRequired,
 };
 
-Searchbar.propTypes = {
-  onSubmit: PropTypes.func,
-};
+export default SearchBar;
