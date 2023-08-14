@@ -11,20 +11,29 @@ import {
 
 class SearchBar extends Component {
   state = {
-    searchName: '', // Зберігає значення введеного пошукового запиту
+    //searchName: '', // Зберігає значення введеного пошукового запиту
     inputValue: '',
   };
 
   handleChange = event => {
     this.setState({ inputValue: event.target.value });
   };
-
-  handleSubmit = event => {
-    event.preventDefault(); // Запобігаємо стандартній поведінці форми
-    const searchQuery = event.target.elements.searchName.value.trim(); // Отримуємо введений пошуковий запит і видаляємо прогалини
-    this.props.onSubmit(searchQuery); //Передаємо введений пошуковий запит батьківському компоненту
-    event.target.reset(); // Скидаємо значення у полі введення після надсилання форми
+  
+  
+  handleSubmit = event =>{
+event.preventDefault();
+this.props.onSubmit(this.state.inputValue);
+this.setState({inputValue:""});
   };
+
+  //handleSubmit = event => {
+   // event.preventDefault(); // Запобігаємо стандартній поведінці форми
+    //const searchQuery = event.target.elements.searchName.value.trim(); // Отримуємо введений пошуковий запит і видаляємо прогалини
+   // this.props.onSubmit(searchQuery); //Передаємо введений пошуковий запит батьківському компоненту
+  //  event.target.reset(); // Скидаємо значення у полі введення після надсилання форми
+  //};
+
+  
 
   render() {
     return (
